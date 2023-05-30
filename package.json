@@ -1,0 +1,11 @@
+{
+  "name": "com.littlebitgames.mixsdk",
+  "displayName": "Mix Sdk",
+  "version": "2.0.5",
+  "unity": "2021.1",
+  "unityRelease": "6f1",
+  "category": "Module",
+  "author": {
+    "name": "LittleBitGames"
+  }
+}
