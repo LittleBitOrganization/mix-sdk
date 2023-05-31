@@ -1,0 +1,17 @@
+{
+    "name": "LittleBitGames.MixSdk",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a4cfc1a18fa3a469b96d885db522f42e",
+        "GUID:98351c966f2563f4ab768231d043a28f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
