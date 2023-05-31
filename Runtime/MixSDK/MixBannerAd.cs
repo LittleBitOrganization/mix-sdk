@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AppLovinMax;
@@ -9,6 +10,7 @@ namespace MixNameSpace
         string adtype = "banner";
         string bannerAdUnitId; // Retrieve the ID from your account
         MaxSdkBase.BannerPosition pos;
+        public event Action<string, MaxSdkBase.AdInfo> onBannerAdRevenuePaidEvent;
 
         public void InitializeBannerAds(string bannerAdUnitId, MaxSdkBase.BannerPosition pos)
         {
@@ -41,7 +43,10 @@ namespace MixNameSpace
 
         private void OnBannerAdClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo) { }
 
-        private void OnBannerAdRevenuePaidEvent(string adUnitId, MaxSdkBase.AdInfo adInfo) { }
+        private void OnBannerAdRevenuePaidEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
+        {
+            onBannerAdRevenuePaidEvent?.Invoke(adUnitId, adInfo);
+        }
 
         private void OnBannerAdExpandedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo) { }
 

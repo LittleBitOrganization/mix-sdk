@@ -12,7 +12,10 @@ namespace MixNameSpace
         string adUnitId;
         int retryAttempt;
         Action onInterstitialHiddenEventAction;
-        
+        public event Action<string, MaxSdkBase.AdInfo> onInterAdRevenuePaidEvent;
+        public event Action<string, MaxSdkBase.ErrorInfo, MaxSdkBase.AdInfo> onAdDisplayFailedEvent;
+        public event Action<string, MaxSdkBase.AdInfo> onAdHiddenEvent;
+        public event Action<string, MaxSdkBase.AdInfo> onAdClickedEvent;
         public void InitializeInterstitialAds(string adUnitId)
         {
             this.adUnitId = adUnitId;
@@ -24,6 +27,7 @@ namespace MixNameSpace
             MaxSdkCallbacks.Interstitial.OnAdClickedEvent += OnInterstitialClickedEvent;
             MaxSdkCallbacks.Interstitial.OnAdHiddenEvent += OnInterstitialHiddenEvent;
             MaxSdkCallbacks.Interstitial.OnAdDisplayFailedEvent += OnInterstitialAdFailedToDisplayEvent;
+            MaxSdkCallbacks.Interstitial.OnAdRevenuePaidEvent += InterstitialOnOnAdRevenuePaidEvent;
 
             // Load the first interstitial
             LoadInterstitial();
@@ -63,14 +67,19 @@ namespace MixNameSpace
 
         private void OnInterstitialAdFailedToDisplayEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo, MaxSdkBase.AdInfo adInfo)
         {
+            onAdDisplayFailedEvent?.Invoke(adUnitId, errorInfo, adInfo);
             // Interstitial ad failed to display. AppLovin recommends that you load the next ad.
             LoadInterstitial();
         }
 
-        private void OnInterstitialClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo) { }
+        private void OnInterstitialClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
+        {
+            onAdClickedEvent?.Invoke(adUnitId, adInfo);
+        }
 
         private void OnInterstitialHiddenEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
+            onAdHiddenEvent?.Invoke(this.adUnitId, adInfo);
             // Interstitial ad is hidden. Pre-load the next ad.
             if (this.onInterstitialHiddenEventAction != null)
             {
@@ -79,6 +88,11 @@ namespace MixNameSpace
             LoadInterstitial();
         }
 
+        private void InterstitialOnOnAdRevenuePaidEvent(string arg1, MaxSdkBase.AdInfo arg2)
+        {
+            onInterAdRevenuePaidEvent?.Invoke(arg1, arg2);
+        }
+        
         public bool IsInterstitialReady()
         {
             return MaxSdk.IsInterstitialReady(adUnitId);

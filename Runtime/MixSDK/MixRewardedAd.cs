@@ -13,6 +13,13 @@ namespace MixNameSpace
         int retryAttempt;
         Action onRewardedAdReceivedRewardEventAction;
         Action onRewardedAdHiddenEventAction;
+        public event Action<string, MaxSdkBase.AdInfo> onRewardedAdRevenuePaidEvent;
+        public event Action<string, MaxSdkBase.AdInfo> onAdLoadedEvent;
+        public event Action<string, MaxSdkBase.ErrorInfo> onAdLoadFailedEvent;
+        public event Action<string, MaxSdkBase.AdInfo> onAdReceivedRewardEvent;
+        public event Action<string, MaxSdkBase.AdInfo> onAdClickedEvent;
+        public event Action<string, MaxSdkBase.AdInfo> onAdHiddenEvent;
+        public event Action<string, MaxSdkBase.ErrorInfo, MaxSdkBase.AdInfo> onAdDisplayFailedEvent;
 
         public void InitializeRewardedAds(string adUnitId)
         {
@@ -35,13 +42,12 @@ namespace MixNameSpace
         private void LoadRewardedAd()
         {
             MaxSdk.LoadRewardedAd(adUnitId);
-            
         }
 
         private void OnRewardedAdLoadedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
             // Rewarded ad is ready for you to show. MaxSdk.IsRewardedAdReady(adUnitId) now returns 'true'.
-
+            onAdLoadedEvent?.Invoke(adUnitId, adInfo);
             // Reset retry attempt
             retryAttempt = 0;
             MixMaxManager.LogAdLoad(adtype, adUnitId);
@@ -49,6 +55,7 @@ namespace MixNameSpace
 
         private void OnRewardedAdLoadFailedEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo)
         {
+            onAdLoadFailedEvent?.Invoke(adUnitId, errorInfo);
             // Rewarded ad failed to load 
             // AppLovin recommends that you retry with exponentially higher delays, up to a maximum delay (in this case 64 seconds).
             MixMaxManager.LogAdLoadFail(adtype, adUnitId, errorInfo);
@@ -65,14 +72,19 @@ namespace MixNameSpace
 
         private void OnRewardedAdFailedToDisplayEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo, MaxSdkBase.AdInfo adInfo)
         {
+            onAdDisplayFailedEvent?.Invoke(adUnitId, errorInfo, adInfo);
             // Rewarded ad failed to display. AppLovin recommends that you load the next ad.
             LoadRewardedAd();
         }
 
-        private void OnRewardedAdClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo) { }
+        private void OnRewardedAdClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
+        {
+            onAdClickedEvent?.Invoke(adUnitId, adInfo);
+        }
 
         private void OnRewardedAdHiddenEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
+            onAdHiddenEvent?.Invoke(adUnitId, adInfo);
             if (this.onRewardedAdHiddenEventAction != null)
             {
                 MixCommon.DelayRunActionNext(onRewardedAdHiddenEventAction);
@@ -83,7 +95,7 @@ namespace MixNameSpace
 
         private void OnRewardedAdReceivedRewardEvent(string adUnitId, MaxSdk.Reward reward, MaxSdkBase.AdInfo adInfo)
         {
-            // The rewarded ad displayed and the user should receive the reward.
+            onAdReceivedRewardEvent?.Invoke(adUnitId, adInfo);
             if (this.onRewardedAdReceivedRewardEventAction != null)
             {
                 MixCommon.DelayRunActionNext(onRewardedAdReceivedRewardEventAction);
@@ -93,6 +105,7 @@ namespace MixNameSpace
 
         private void OnRewardedAdRevenuePaidEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
+            onRewardedAdRevenuePaidEvent?.Invoke(adUnitId, adInfo);
             // Ad revenue paid. Use this callback to track user revenue.
         }
 

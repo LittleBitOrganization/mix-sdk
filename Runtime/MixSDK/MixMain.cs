@@ -13,6 +13,7 @@ namespace MixNameSpace
         private Action<string> initCallback;
         static public string SDK_VERSION = "mix-newpay-v27";
         public Action<MixAdjustInfo> adjustInfoCallback;
+        public event Action OnMaxInit;
         
         private void Awake()
         {
@@ -46,6 +47,7 @@ namespace MixNameSpace
         }
         public void NexIap(string s)
         {
+            OnMaxInit?.Invoke();
             MixIap.instance.Init(mixSDKConfig, SDKInitFinish);
         }
 
