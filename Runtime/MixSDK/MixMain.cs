@@ -50,7 +50,14 @@ namespace MixNameSpace
             OnMaxInit?.Invoke();
             MixIap.instance.Init(mixSDKConfig, SDKInitFinish);
         }
-
+        public void IapInit(Action onComplete)
+        {
+            MixIap.instance.Init(mixSDKConfig, (s)=>
+            {
+                SDKInitFinish(s);
+                onComplete?.Invoke();
+            });
+        }
         public void SDKInitFinish(string ispFinishResult)
         {
             Debug.Log("Mix SDKInitFinish and game_start and restore the adjust");
