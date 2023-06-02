@@ -40,7 +40,7 @@ namespace MixNameSpace
         private Action<string> finishCallback;
         private Action<string> failAction;
         private Action<MixCallbackData> action;
-        public bool isInit = false;
+        private bool isInit = false;
 
         public void Init(MixSDKConfig config, Action<string> finishCallback)
         {

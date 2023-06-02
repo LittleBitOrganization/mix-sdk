@@ -7,6 +7,7 @@ namespace MixNameSpace
 {
     public class MixMain : MonoBehaviour
     {
+
         static public MixMain instance;
         static public MixLogInfo mixLogInfo;
         static public MixSDKConfig mixSDKConfig;
