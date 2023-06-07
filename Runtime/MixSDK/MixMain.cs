@@ -18,11 +18,7 @@ namespace MixNameSpace
         
         private void Awake()
         {
-            if (instance != null)
-            {
-                DestroyImmediate(gameObject);
-            }
-            else
+            if (instance == null)
             {
                 DontDestroyOnLoad(gameObject);
                 instance = this;
