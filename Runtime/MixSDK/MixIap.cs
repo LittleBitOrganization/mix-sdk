@@ -220,6 +220,7 @@ namespace MixNameSpace
 
         public void PurchaseItem(string itemId, string envId, string cpOrderId, Action<string> failAction)
         {
+            Debug.LogError($"PurchaseItem. IsInit: {isInit} Hash: {instance.GetHashCode()}");
             if (!this.isInit) return;
             float price = usdPriceMap[itemId];
             MixThirdUpload.instance.UploadAddToCart(price, "USD", itemId);
@@ -249,6 +250,7 @@ namespace MixNameSpace
 
         public void FinishPurchase(MixCallbackData e)
         {
+            Debug.LogError($"FinishPurchase. IsInit: {isInit} Hash: {instance.GetHashCode()}");
             if (!this.isInit) return;
             MixSDKBridgeFactory.instance.OnRequestMixGameOrderIdConsume(e.gameOrderId, (dict) => {
                 Debug.LogFormat("MIXSDK[C#]-> consume order success:{0};", Json.Serialize(dict));

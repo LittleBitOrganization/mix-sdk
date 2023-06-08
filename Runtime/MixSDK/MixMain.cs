@@ -20,8 +20,19 @@ namespace MixNameSpace
         {
             if (instance == null)
             {
+                Debug.LogError("MixMain instance == null");
+            }
+            else
+            {
+                Debug.LogError($"MixMain instance: {instance.GetHashCode()}" );
+            }
+
+            
+            if (instance == null)
+            {
                 DontDestroyOnLoad(gameObject);
                 instance = this;
+                Debug.LogError($"MixMain instance after init: {instance.GetHashCode()}" );
             }
         }
 
