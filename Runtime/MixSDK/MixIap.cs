@@ -236,6 +236,7 @@ namespace MixNameSpace
                 MixSDKBridgeFactory.instance.OnPayment(itemId, envId, cpOrderId, gameOrderId, (retDict) => {
                     int code = (int) retDict[MixSDKProto.Key.Code];
                     string msg = retDict[MixSDKProto.Key.Msg] as string;
+                    Debug.LogError($"MIXSDK[C#]-> complete OnPayment with code {code} message {msg}");
                     if (MixSDKProto.Code.Succ != code) // 成功会直接走验单逻辑(不会回调),这里只用于提示错误信息
                     {
                         Debug.LogErrorFormat("MIXSDK[C#]-> PurchaseItem error:{0};", msg);
