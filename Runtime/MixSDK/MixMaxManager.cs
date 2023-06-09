@@ -15,6 +15,7 @@ namespace MixNameSpace
         public MixInterstitialAd mixInterstitialAd = new MixInterstitialAd();
         public MixAppOpenAd mixAppOpenAd = new MixAppOpenAd();
 
+
         public void Init(string maxKey, string rid, string iid, string bid, string oid, MaxSdkBase.BannerPosition pos,
             bool debug,
             Action<string> finishCallback)
@@ -68,7 +69,6 @@ namespace MixNameSpace
             }
             //MaxSdk.SetUserId("USER_ID");
             MaxSdk.InitializeSdk();
-            
         }
 
         static public void LogAdLoad(string adtype, string unitId)

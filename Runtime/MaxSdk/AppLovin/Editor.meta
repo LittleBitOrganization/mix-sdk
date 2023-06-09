@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: 07934c7276dc04539980effcca194b63
+guid: f2e224a19462c4c039e9aa1c09e48acf
 labels:
 - al_max
-- al_max_export_path-MaxSdk/Mediation/UnityAds
+- al_max_export_path-MaxSdk/AppLovin/Editor
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

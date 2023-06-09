@@ -28,6 +28,7 @@ namespace MixNameSpace
         // Start is called before the first frame update
         void Start()
         {
+            if (isInitSkip) return;
             this.bridgeH5WebView_setLogCallback();
             if (null == MixH5WebViewManager.initConfig) {
                 this.bridgeH5WebView_init();
@@ -40,6 +41,7 @@ namespace MixNameSpace
         void Update() { }
         private System.Action<string, Dictionary<string, string>> logCallback = null;
         private bool isInitFinish = false;
+        static private bool isInitSkip = false;
         static private string network = null; // organic
         static private string initConfig = null;
         private System.Action<string> successCallback = null;
@@ -74,6 +76,11 @@ namespace MixNameSpace
                 Debug.LogException(e);
                 return (T) default;
             }
+        }
+
+        static public void InitSkip() { 
+            MixH5WebViewManager.isInitSkip = true;
+            MixH5WebViewManager.instance.isInitFinish = true;
         }
 
         private void bridgeH5WebView_init() 
@@ -362,6 +369,7 @@ namespace MixNameSpace
         static public void refresh_web_show_more() { }
         static public void refresh_web_show_reward() { }
         static public void refresh_web_show_inter() { }
+        static public void InitSkip() {  }
     #endif
     }
 }

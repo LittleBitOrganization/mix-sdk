@@ -12,7 +12,7 @@ namespace MixNameSpace
         static public MixLogInfo mixLogInfo;
         static public MixSDKConfig mixSDKConfig;
         private Action<string> initCallback;
-        static public string SDK_VERSION = "mix-newpay-v27";
+        static public string SDK_VERSION = "mix-newpay-v30";
         public Action<MixAdjustInfo> adjustInfoCallback;
         public event Action OnMaxInit;
         

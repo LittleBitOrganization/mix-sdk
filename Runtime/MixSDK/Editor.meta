@@ -1,8 +1,5 @@
 fileFormatVersion: 2
-guid: 07934c7276dc04539980effcca194b63
-labels:
-- al_max
-- al_max_export_path-MaxSdk/Mediation/UnityAds
+guid: fd99acc9c666347c8acd6d86d731b7ac
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

@@ -44,7 +44,8 @@ namespace MixNameSpace
                 ProductType productType = MixIap.instance.ConvertProductType(itemInfo.type);
                 if (null == itemInfo) {
                     Debug.LogErrorFormat("MIXSDK[C#]-> Can not found the item:{0}:", productId);
-                    if (null != failAction) failAction("Can not found the item:" + productId);
+                    string text = "Can not found the item:" + productId;
+                    if (null != failAction) failAction("{\"code\":-5225,\"msg\":\"" + text +"\"}");
                     return;
                 }
 
@@ -87,15 +88,14 @@ namespace MixNameSpace
                         {
                             string msg = d[MixSDKProto.Key.Msg] as string;
                             Debug.LogFormat("MIXSDK[C#]-> ConfirmOrderConsume failed msg:{0};", msg);
-                            if (null != failAction) failAction(msg);
-
+                            if (null != failAction) failAction("{ \"code\":-5225,\"msg\":\"" + msg +"\"}");
                         }
                     });
                 }
             }, (msg) => {
                 Debug.LogErrorFormat("MIXSDK[C#]-> check game order failed msg:{0};", msg);
                 // TODO 上传查单失败日志
-                if (null != failAction) failAction(msg);
+                if (null != failAction) failAction("{\"code\":-5225,\"msg\":\"" + msg +"\"}");
             });
         }
     }

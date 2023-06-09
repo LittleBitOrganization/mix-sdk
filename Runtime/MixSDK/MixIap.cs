@@ -220,7 +220,6 @@ namespace MixNameSpace
 
         public void PurchaseItem(string itemId, string envId, string cpOrderId, Action<string> failAction)
         {
-            Debug.LogError($"PurchaseItem. IsInit: {isInit} Hash: {instance.GetHashCode()}");
             if (!this.isInit) return;
             float price = usdPriceMap[itemId];
             MixThirdUpload.instance.UploadAddToCart(price, "USD", itemId);
@@ -236,22 +235,21 @@ namespace MixNameSpace
                 MixSDKBridgeFactory.instance.OnPayment(itemId, envId, cpOrderId, gameOrderId, (retDict) => {
                     int code = (int) retDict[MixSDKProto.Key.Code];
                     string msg = retDict[MixSDKProto.Key.Msg] as string;
-                    Debug.LogError($"MIXSDK[C#]-> complete OnPayment with code {code} message {msg}");
                     if (MixSDKProto.Code.Succ != code) // 成功会直接走验单逻辑(不会回调),这里只用于提示错误信息
                     {
-                        Debug.LogErrorFormat("MIXSDK[C#]-> PurchaseItem error:{0};", msg);
+                        Debug.LogWarningFormat("MIXSDK[C#]-> PurchaseItem error:{0};", msg);
                         if (null != failAction)  failAction(msg);
                     }
                 });
             }, (msg) => {  // failed
                 Debug.LogErrorFormat("MIXSDK[C#]-> create game order failed msg:{0};", msg);
-                if (null != failAction) failAction("create game orderId failed:" + msg);
+                string text = "create game orderId failed:" + msg;
+                if (null != failAction) failAction("{\"code\":-5225,\"msg\":\"" + text +"\"}");
             });
         }
 
         public void FinishPurchase(MixCallbackData e)
         {
-            Debug.LogError($"FinishPurchase. IsInit: {isInit} Hash: {instance.GetHashCode()}");
             if (!this.isInit) return;
             MixSDKBridgeFactory.instance.OnRequestMixGameOrderIdConsume(e.gameOrderId, (dict) => {
                 Debug.LogFormat("MIXSDK[C#]-> consume order success:{0};", Json.Serialize(dict));

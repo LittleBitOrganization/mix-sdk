@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dependencies>
+    <androidPackages>
+        <repositories>
+            <!--<repository>https://android-sdk.is.com</repository>-->
+            <repository>https://mvn.bepic.cc/repository/maven-releases/</repository>
+        </repositories>
+
+
+        <!--<androidPackage spec="com.simplesdk:SimpleNativeBase:0.3.37" />-->
+        <androidPackage spec="com.android.billingclient:billing:4.0.0" />
+        <androidPackage spec="com.mix.h5:MixH5WebView:0.3.9" />
+    </androidPackages>
+    <iosPods>
+
+	</iosPods>
+</dependencies>
