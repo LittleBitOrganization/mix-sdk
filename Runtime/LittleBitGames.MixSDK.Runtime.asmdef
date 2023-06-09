@@ -1,16 +1,11 @@
 {
-    "name": "LittleBitGames.MixSDK.MixSDK",
+    "name": "LittleBitGames.MixSDK.Runtime",
     "rootNamespace": "",
     "references": [
-        "GUID:98351c966f2563f4ab768231d043a28f",
         "GUID:a4cfc1a18fa3a469b96d885db522f42e",
-        "GUID:e63a64384cc3ef04cac761c1ce76e9c2",
-        "GUID:7bb1ee73ebb9f114188944f67b1333d6"
+        "GUID:98351c966f2563f4ab768231d043a28f"
     ],
-    "includePlatforms": [
-        "Android",
-        "iOS"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

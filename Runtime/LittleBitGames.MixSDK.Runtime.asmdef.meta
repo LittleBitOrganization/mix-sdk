@@ -1,8 +1,5 @@
 fileFormatVersion: 2
-guid: e12a7fc990f1240a4b66e0b772d601cc
-labels:
-- al_max
-- al_max_export_path-MaxSdk/LittleBitGames.MixSDK.MaxSDK.asmdef
+guid: 0aadd910c4982ca4190ebc1e869119a7
 AssemblyDefinitionImporter:
   externalObjects: {}
   userData: 
