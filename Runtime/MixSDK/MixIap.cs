@@ -101,6 +101,9 @@ namespace MixNameSpace
                             mixCallbackData.itemType = this.ConvertProductType(this.GetItemInfo(mixCallbackData.itemId).type);
                             UnityMainThreadDispatcher.Instance().Enqueue(() =>
                             {
+                                Debug.LogWarning("BEFORE TEST!");
+                                PlayerPrefs.SetInt("Test",1);
+                                Debug.LogWarning("AFTER TEST!");
                                 this.action(mixCallbackData);
                             });
                         }
