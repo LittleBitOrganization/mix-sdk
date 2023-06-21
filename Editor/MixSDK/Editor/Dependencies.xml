@@ -9,7 +9,7 @@
 
         <!--<androidPackage spec="com.simplesdk:SimpleNativeBase:0.3.37" />-->
         <androidPackage spec="com.android.billingclient:billing:4.0.0" />
-        <androidPackage spec="com.mix.h5:MixH5WebView:0.3.7" />
+        <androidPackage spec="com.mix.h5:MixH5WebView:0.4.0" />
     </androidPackages>
     <iosPods>
 

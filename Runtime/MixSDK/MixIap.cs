@@ -101,9 +101,6 @@ namespace MixNameSpace
                             mixCallbackData.itemType = this.ConvertProductType(this.GetItemInfo(mixCallbackData.itemId).type);
                             UnityMainThreadDispatcher.Instance().Enqueue(() =>
                             {
-                                Debug.LogWarning("BEFORE TEST!");
-                                PlayerPrefs.SetInt("Test",1);
-                                Debug.LogWarning("AFTER TEST!");
                                 this.action(mixCallbackData);
                             });
                         }
@@ -202,7 +199,11 @@ namespace MixNameSpace
 
         public void SetAction(Action<MixCallbackData> action)
         {
-            this.action = action;
+            this.action = (MixCallbackData data) => {
+                UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                    action(data);
+                });
+            };;
         }
         public Action<MixCallbackData> GetAction() {
             return this.action;
@@ -223,7 +224,11 @@ namespace MixNameSpace
 
         public void PurchaseItem(string itemId, string envId, string cpOrderId, Action<string> failAction)
         {
-            if (!this.isInit) return;
+            if (!this.isInit) 
+            {
+                failAction("{\"code\":-5225,\"msg\":\"Please initialize the in-app purchase function or check the product information first\"}");
+                return;
+            }
             float price = usdPriceMap[itemId];
             MixThirdUpload.instance.UploadAddToCart(price, "USD", itemId);
             this.failAction = failAction;

@@ -317,23 +317,101 @@ namespace MixNameSpace
                 Debug.LogWarningFormat("h5 init failed: {0};", null == errorMsg ? "" : errorMsg);
             }
         }
+        
+        static private object GetStaticVariable(string className, string variableName) 
+        {
+            try 
+            {   
+                if (!string.IsNullOrWhiteSpace(className) && !string.IsNullOrWhiteSpace(variableName)) 
+                {
+                    System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+                    if (null != assembly) 
+                    {
+                        System.Type type = assembly.GetType(className);
+                        if (null != type) 
+                        {
+                            System.Reflection.FieldInfo fieldInfo = type.GetField(variableName);
+                            if (null != fieldInfo) 
+                            {
+                                return fieldInfo.GetValue(null);
+                            }
+                        }
+                    }
+                }
+            } 
+            catch(System.Exception e)
+            {
+                Debug.LogWarningFormat("try get static variable {0}", e.ToString());
+            }
+            return null;
+        }
+
+        static private object InvokeNemberMethod(object instance, string methodName, params object[] args)
+        {
+            try 
+            {
+                if (null != instance && !string.IsNullOrWhiteSpace(methodName))
+                {
+                    System.Type type = instance.GetType();
+                    if (null != type)
+                    {
+                        System.Reflection.MethodInfo methodInfo = type.GetMethod(methodName);
+                        if (null != methodInfo) 
+                        {
+                            return methodInfo.Invoke(instance, args);
+                        }
+                    }
+                }
+            }
+            catch(System.Exception e)
+            {
+                Debug.LogWarningFormat("try invoke nember method {0}", e.ToString());
+            }
+            return null;
+        }
+
+        static private object InvokeStaticMethod(string className, string methodName, params object[] args)
+        {
+            try 
+            {
+                if (!string.IsNullOrWhiteSpace(className) && !string.IsNullOrWhiteSpace(methodName)) 
+                {
+                    System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+                    if (null != assembly)
+                    {
+                        System.Type type = assembly.GetType(className);
+                        if (null != type)
+                        {
+                            System.Reflection.MethodInfo methodInfo = type.GetMethod(methodName);
+                            if (null != methodInfo)
+                            {
+                                return methodInfo.Invoke(null, args);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarningFormat("try invoke static method {0}", e.ToString());
+            }
+            return null;
+        }
 
         public class LogCallback : AndroidJavaProxy 
         {
             public LogCallback() : base("com.mix.h5.webview.LogCallback") { }
             void log(string eventName, AndroidJavaObject map)
             {
-                try {
-                    Debug.LogFormat("h5 webview log: {0};", null == eventName ? "none" : eventName);
-                    if (null != MixH5WebViewManager.instance && null != MixH5WebViewManager.instance.logCallback)
-                    {
-                        Dictionary<string, string> paramsDict = new Dictionary<string, string>();
+                UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                    try {
                         string network = map.Call<string>("get", "network");
                         string name = map.Call<string>("get", "name");
                         string url = map.Call<string>("get", "url");
                         string screen_type = map.Call<string>("get", "screen_type");
                         string seconds = map.Call<bool>("containsKey", "seconds") ? map.Call<string>("get", "seconds") : "-1";
-                        Debug.LogFormat("h5 webview handler network {0}; name {1}; url {2}; screen_type {3}; seconds: {4};", network, name, url, screen_type, seconds);
+                        Debug.LogFormat("h5 log callback eventName: {0}; network {1}; name {2}; url {3}; screen_type {4}; seconds: {5};", eventName, network, name, url, screen_type, seconds);
+                        Dictionary<string, string> paramsDict = new Dictionary<string, string>();
                         paramsDict.Add("network", network);
                         paramsDict.Add("name", name);
                         paramsDict.Add("url", url);
@@ -341,11 +419,57 @@ namespace MixNameSpace
                         if (!"-1".Equals(seconds)) {
                             paramsDict.Add("seconds", seconds.ToString());
                         }
-                        MixH5WebViewManager.instance.logCallback(eventName, paramsDict);
+                        object inst = null;
+                        if (null == inst) 
+                        {
+                            inst = GetStaticVariable("MixNameSpace.MixData", "instance");
+                        }
+                        if (null == inst) 
+                        {
+                            inst = GetStaticVariable("DataUploadNS.DataUpload", "instance");
+                        }
+
+                        System.Action action = ()=> {
+                            Debug.LogFormat("try to initiative upload log");
+                            if (null != MixH5WebViewManager.instance && null != MixH5WebViewManager.instance.logCallback)
+                            {
+                                MixH5WebViewManager.instance.logCallback(eventName, paramsDict);
+                            }
+                        };
+
+                        if (null != inst) 
+                        {
+                            try {
+                                Debug.LogFormat("try to invoke upload log");
+                                object ret = InvokeNemberMethod(inst, "Log", eventName, paramsDict);
+                                if (null != ret) {
+                                    bool b;
+                                    if (bool.TryParse(ret.ToString(), out b))
+                                    {
+                                        if (!b) 
+                                        {
+                                            action();
+                                        }
+                                    } 
+                                    else 
+                                    {
+                                        action();
+                                    }
+                                } else {
+                                    action();
+                                }
+                            } catch (System.Exception ex) {
+                                action();
+                            }
+                        } 
+                        else 
+                        {
+                            action();
+                        }
+                    } catch (System.Exception e) {
+                        Debug.LogWarningFormat("h5 log callback error: {0};", e.ToString());
                     }
-                } catch (System.Exception e) {
-                    Debug.LogErrorFormat("h5 upload log error: {0};", e.ToString());
-                }
+                });
             }
         }
     #else

@@ -324,11 +324,7 @@ namespace MixNameSpace
             if (GUI.Button(new Rect(0, y, buttonWith, buttonHeight), "refresh web show more", btnStyle))
             {
                 logs.Add("refresh web show more");
-                // MixH5WebViewManager.refresh_web_show_more();
-#if UNITY_IOS
-                string result = Method_CPP_Test1("CPP");
-                Debug.LogFormat("Method_CPP_Test1 result: {0};", result);
-#endif
+                MixH5WebViewManager.refresh_web_show_more();
             }
 
             
@@ -357,10 +353,7 @@ namespace MixNameSpace
             //		//show all buy items
 
         }
-#if UNITY_IOS
-        [System.Runtime.InteropServices.DllImport("__Internal")]
-        private static extern string Method_CPP_Test1(string msg);
-#endif
+
         void Update()
         {
             if (Input.touchCount > 0)
