@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dependencies>
+    <androidPackages>
+        <androidPackage spec="com.facebook.android:facebook-login:11.3.0" />
+        <androidPackage spec="com.facebook.android:facebook-share:11.3.0" />
+        <androidPackage spec="com.google.firebase:firebase-analytics:20.1.0" />
+    </androidPackages>
+    <iosPods>
+        <iosPod name="FBSDKCoreKit" version="14.1" />
+        <iosPod name="FBSDKShareKit" version="14.1" />
+        <iosPod name="Firebase/Analytics" version="10.1.0" />
+        <iosPod name="Firebase/Core" version="10.1.0" />
+    </iosPods>
+</dependencies>
