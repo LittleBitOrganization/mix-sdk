@@ -88,7 +88,7 @@ namespace MixNameSpace
                         {
                             string msg = d[MixSDKProto.Key.Msg] as string;
                             Debug.LogFormat("MIXSDK[C#]-> ConfirmOrderConsume failed msg:{0};", msg);
-                            if (null != failAction) failAction("{ \"code\":-5225,\"msg\":\"" + msg +"\"}");
+                            if (null != failAction) failAction("{ \"code\": " + code + ",\"msg\":\"" + msg +"\"}");
                         }
                     });
                 }

@@ -96,7 +96,9 @@ namespace MixNameSpace
             {
                 string itemId = entry.Key;
                 string subsJson = entry.Value as string;
-                // Debug.LogFormat("MIXSDK[C#]-> MixSDKBridgeAndroid-GetAllSubscriptionInfo dataType:{0}; dictJson:{1};", Json.Deserialize(subsJson).GetType().Name, subsJson);
+                Debug.LogFormat("MIXSDK[C#]-> MixSDKBridgeAndroid-GetAllSubscriptionInfo dataType:{0}; itemId: {1}; \ndictJson:{2};", Json.Deserialize(subsJson).GetType().Name, itemId, subsJson);
+                Debug.LogFormat("MIXSDK[C#]-> dictJson A: {0};", subsJson.Substring(0, subsJson.Length / 2));
+                Debug.LogFormat("MIXSDK[C#]-> dictJson B: {0};", subsJson.Substring(subsJson.Length / 2));
                 var receipt_wrapper = Json.Deserialize(subsJson) as Dictionary<string, object>;
 
 

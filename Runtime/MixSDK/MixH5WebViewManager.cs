@@ -30,10 +30,14 @@ namespace MixNameSpace
         {
             if (isInitSkip) return;
             this.bridgeH5WebView_setLogCallback();
-            if (null == MixH5WebViewManager.initConfig) {
-                this.bridgeH5WebView_init();
-            } else {
+            if (!string.IsNullOrWhiteSpace(MixH5WebViewManager.initConfig) 
+            || !string.IsNullOrWhiteSpace(MixH5WebViewManager.host)) 
+            {
                 this.bridgeH5WebView_initWebView();
+            } 
+            else 
+            {
+                this.bridgeH5WebView_init();
             }
         }
 
@@ -44,6 +48,7 @@ namespace MixNameSpace
         static private bool isInitSkip = false;
         static private string network = null; // organic
         static private string initConfig = null;
+        static private string host = null;
         private System.Action<string> successCallback = null;
         private System.Action<string> failCallback = null;
         private System.Action<string> closeCallback = null;
@@ -95,7 +100,7 @@ namespace MixNameSpace
             } 
             else 
             {
-                Debug.LogErrorFormat("can not find network");
+                Debug.LogWarningFormat("can not find network");
             }
         }
 
@@ -104,12 +109,20 @@ namespace MixNameSpace
             Debug.LogFormat("ready to init h5 webview with config");
             if (null != network) 
             {
-                string methodName = "bridgeInitWebView";
-                CallStatic<string>(bridgeClassName, methodName, network, MixH5WebViewManager.initConfig, new MixH5WebViewListener());
+                if (!string.IsNullOrWhiteSpace(MixH5WebViewManager.initConfig) 
+                && !string.IsNullOrWhiteSpace(MixH5WebViewManager.host))
+                {
+                    string methodName = "bridgeInitWebView";
+                CallStatic<string>(bridgeClassName, methodName, network, MixH5WebViewManager.initConfig, MixH5WebViewManager.host, new MixH5WebViewListener());
+                }
+                else
+                {
+                    Debug.LogWarningFormat("can not find initConfig or host");
+                }
             }
             else 
             {
-                Debug.LogErrorFormat("can not find network");
+                Debug.LogWarningFormat("can not find network");
             }
         }
 
@@ -234,6 +247,14 @@ namespace MixNameSpace
             return new int[] {screenWidth, screenHeight}; 
         }
 
+        static public int[] GetAdapterSizeOfReal() {
+            int adapterWidth = CallStatic<int>(bridgeClassName, "bridgeGetAdapterWidthOfReal");
+            int adapterHeight = CallStatic<int>(bridgeClassName, "bridgeGetAdapterHeightOfReal");
+            if (-1 == adapterWidth) adapterWidth = 375 * 2;
+            if (-1 == adapterHeight) adapterHeight = 667 * 2;
+            return new int[] { adapterWidth, adapterHeight }; 
+        }
+
         static public void SetInitConfig(string json) {
             MixH5WebViewManager.initConfig = json;
         }
@@ -241,6 +262,11 @@ namespace MixNameSpace
         static public void SetNetwork(string network)
         {
             MixH5WebViewManager.network = network;
+        }
+
+        static public void SetHost(string host)
+        {
+            MixH5WebViewManager.host = host;
         }
 
         // TODO 需要设置打日志回调
@@ -405,28 +431,32 @@ namespace MixNameSpace
             {
                 UnityMainThreadDispatcher.Instance().Enqueue(() => {
                     try {
-                        string network = map.Call<string>("get", "network");
-                        string name = map.Call<string>("get", "name");
-                        string url = map.Call<string>("get", "url");
-                        string screen_type = map.Call<string>("get", "screen_type");
-                        string seconds = map.Call<bool>("containsKey", "seconds") ? map.Call<string>("get", "seconds") : "-1";
-                        Debug.LogFormat("h5 log callback eventName: {0}; network {1}; name {2}; url {3}; screen_type {4}; seconds: {5};", eventName, network, name, url, screen_type, seconds);
+                        Debug.LogFormat("talk log callback eventName: {0};", eventName);
                         Dictionary<string, string> paramsDict = new Dictionary<string, string>();
-                        paramsDict.Add("network", network);
-                        paramsDict.Add("name", name);
-                        paramsDict.Add("url", url);
-                        paramsDict.Add("screen_type", screen_type);
-                        if (!"-1".Equals(seconds)) {
-                            paramsDict.Add("seconds", seconds.ToString());
-                        }
+                        if (map.Call<bool>("containsKey", "network"))       paramsDict.Add("network",       map.Call<string>("get", "network"));
+                        if (map.Call<bool>("containsKey", "name"))          paramsDict.Add("name",          map.Call<string>("get", "name"));
+                        if (map.Call<bool>("containsKey", "url"))           paramsDict.Add("url",           map.Call<string>("get", "url"));
+                        if (map.Call<bool>("containsKey", "screen_type"))   paramsDict.Add("screen_type",   map.Call<string>("get", "screen_type"));
+                        if (map.Call<bool>("containsKey", "seconds"))       paramsDict.Add("seconds",       map.Call<string>("get", "seconds"));
+                        if (map.Call<bool>("containsKey", "sdk_version"))   paramsDict.Add("sdk_version",   map.Call<string>("get", "sdk_version"));
+                        if (map.Call<bool>("containsKey", "actionid"))      paramsDict.Add("actionid",      map.Call<string>("get", "actionid"));
+                        if (map.Call<bool>("containsKey", "actiontype"))    paramsDict.Add("actiontype",    map.Call<string>("get", "actiontype"));
+                        if (map.Call<bool>("containsKey", "errorMsg"))      paramsDict.Add("errorMsg",      map.Call<string>("get", "errorMsg"));
+                        if (map.Call<bool>("containsKey", "response"))      paramsDict.Add("response",      map.Call<string>("get", "response"));
+                        if (map.Call<bool>("containsKey", "config"))        paramsDict.Add("config",        map.Call<string>("get", "config"));
+                        if (map.Call<bool>("containsKey", "status"))        paramsDict.Add("status",        map.Call<string>("get", "status"));
+
                         object inst = null;
+                        string logMethodName = "Log";
                         if (null == inst) 
                         {
                             inst = GetStaticVariable("MixNameSpace.MixData", "instance");
+                            logMethodName = "Log";
                         }
-                        if (null == inst) 
+                        if (null == inst)
                         {
                             inst = GetStaticVariable("DataUploadNS.DataUpload", "instance");
+                            logMethodName = "LogWithReturn";
                         }
 
                         System.Action action = ()=> {
@@ -441,7 +471,7 @@ namespace MixNameSpace
                         {
                             try {
                                 Debug.LogFormat("try to invoke upload log");
-                                object ret = InvokeNemberMethod(inst, "Log", eventName, paramsDict);
+                                object ret = InvokeNemberMethod(inst, logMethodName, eventName, paramsDict);
                                 if (null != ret) {
                                     bool b;
                                     if (bool.TryParse(ret.ToString(), out b))
@@ -483,9 +513,11 @@ namespace MixNameSpace
         private void bridgeH5WebView_OpenTaskWebView(double amount) { }
         private void bridgeH5WebView_OpenHalfWebView(int posX, int posY, int width, int height) { }
         private void bridgeH5WebView_CloseHalfWebView() { }
-        static public int[] GetScreenSizeOfReal() { return new int[] {Screen.width, Screen.height}; }
+        static public int[] GetScreenSizeOfReal() { return new int[] { Screen.width, Screen.height }; }
+        static public int[] GetAdapterSizeOfReal() { return new int[] { 375 * 2, 667 * 2 }; }
         static public void SetInitConfig(string json) { }
         static public void SetNetwork(string network) { }
+        static public void SetHost(string host) { }
         static public void SetLogCallback(System.Action<string, Dictionary<string, string>> logCallback) { }
         static public void OpenTaskWebView(double amount, System.Action<string> successCallback, System.Action<string> failCallback) { }
         static public void OpenHalfWebView(int posX, int posY, int width, int height, System.Action<string> closeCallback, System.Action<bool, string> fullScreenCallback) { }
