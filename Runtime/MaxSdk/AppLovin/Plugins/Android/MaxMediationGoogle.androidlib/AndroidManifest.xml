@@ -5,6 +5,6 @@
     <application>
         <meta-data
                 android:name="com.google.android.gms.ads.APPLICATION_ID"
-                android:value="INSERT_YOUR_ADMOB_APP_ID_HERE"/>
+                android:value="ca-app-pub-4825215809757762~9633070872"/>
     </application>
 </manifest>
