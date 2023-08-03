@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MixNameSpace
 {
-#if UNITY_IOS
+#if UNITY_IOS && !UNITY_EDITOR
     public class MixSDKBridgeiOS : MixSDKBridgeBase
     {
         private readonly string applePayment = MixSDKProto.Type.ApplePayment.Sdk;

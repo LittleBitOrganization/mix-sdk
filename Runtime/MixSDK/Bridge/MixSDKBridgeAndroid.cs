@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MixNameSpace
 {
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
     public class MixSDKBridgeAndroid : MixSDKBridgeBase
     {
         public override void OnLog(string eventName, Dictionary<string, object> dict)
@@ -199,6 +199,33 @@ namespace MixNameSpace
                 { "googleCheck", googleCheck },
             };
             base.OnRequestCheckPay(read, success, fail);
+        }
+
+        public override string GetWalleChannelName() 
+        {
+            try 
+            {
+                using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer")) 
+                {
+                    using (AndroidJavaObject currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity")) 
+                    {
+                        using (AndroidJavaObject applicationContext = currentActivity.Call<AndroidJavaObject>("getApplicationContext")) 
+                        {
+                            string className = "com.mix.walle.WalleChannelReader";
+                            string methodName = "getChannel";
+                            using (AndroidJavaClass walleChannelReader = new AndroidJavaClass(className))
+                            {
+                                string channelName = walleChannelReader.CallStatic<string>(methodName, applicationContext);
+                                Debug.Log($"find channel name: {channelName}");
+                                return channelName;
+                            }
+                        }
+                    }
+                }
+            } 
+            catch (System.Exception e) { Debug.LogException(e); }
+            Debug.Log("not find channel name");
+            return null;
         }
     }
     // 订阅商品信息

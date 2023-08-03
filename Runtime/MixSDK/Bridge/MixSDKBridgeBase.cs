@@ -79,6 +79,11 @@ namespace MixNameSpace
                 MixSDKBridgeCallback.instance.StartCoroutine(MixServer.SendPost(MixUrlPath.GAME_ORDER_ID_CONSUME_PATH, read, success, fail));
             });
         }
+
+        public virtual string GetWalleChannelName() 
+        {
+            return null;
+        }
     }
 
     // 订阅商品信息

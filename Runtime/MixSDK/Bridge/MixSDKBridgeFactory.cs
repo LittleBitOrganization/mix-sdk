@@ -9,12 +9,12 @@ namespace MixNameSpace
         private MixSDKBridgeFactory() { }
         static public IMixSDKBridge instance = Singleton.bridge;
         static private class Singleton {
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
             static public readonly IMixSDKBridge bridge = new MixSDKBridgeAndroid();
-#elif UNITY_IOS
+#elif UNITY_IOS && !UNITY_EDITOR
             static public readonly IMixSDKBridge bridge = new MixSDKBridgeiOS();
-#elif  UNITY_EDITOR
-            static public readonly IMixSDKBridge bridge = new MixSDKBridgeEditor();
+#elif UNITY_EDITOR
+        static public readonly IMixSDKBridge bridge = new MixSDKBridgeEditor();
 #else
             static public readonly IMixSDKBridge bridge = new MixSDKBridgeEditor();
 #endif

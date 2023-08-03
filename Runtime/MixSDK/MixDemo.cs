@@ -37,7 +37,7 @@ namespace MixNameSpace
 
             //the sdkOrderIds should save in the local or cloud
             HashSet<string> hasSendedSdkOrders = new HashSet<string>();
-
+            this.KeepScreenOn();
 
             MixMain.instance.adjustInfoCallback = (r) =>
             {
@@ -235,6 +235,7 @@ namespace MixNameSpace
                 logs.Add("get result from subs " + infos.Count);
                 foreach (var one in infos)
                 {
+                    logs.Add("querysub " + one.itemId + " " + one.purchaseTime + " " + one.expireTime);
                     Debug.Log("querysub " + one.isSubscribed + " " + one.purchaseTime + " "+one.expireTime);
                 }
             }
@@ -266,8 +267,8 @@ namespace MixNameSpace
             y += buttonHeight + 10;
             if (GUI.Button(new Rect(0, y, buttonWith, buttonHeight), "share link fb", btnStyle))
             {
-                logs.Add("try share url to facebook");
-                string url = "https://www.facebook.com";
+                // logs.Add("try share url to facebook");
+                // string url = "https://www.facebook.com";
                 // MixThirdShare.instance.ShareFacebook(url, null, (result) => {
                 //     logs.Add("share fb link success: " + result);
                 // }, (code, errorMsg) => {
@@ -277,9 +278,9 @@ namespace MixNameSpace
             y += buttonHeight + 10;
             if (GUI.Button(new Rect(0, y, buttonWith, buttonHeight), "share photo fb", btnStyle))
             {
-                logs.Add("try share image to facebook");
-                string imageBase64 = "iVBORw0KGgoAAAANSUhEUgAAACAAAAARCAIAAAAzPjmrAAAE+UlEQVQ4ESWVyW4dxxWG69TcM+9AUaJImYyswaOMLALbCWDAq+wC5HXyDHmPrLMykG1sIEACBPEg2JRE2qJIXvFOfW9PNaduAjQK6Oq/vjrndP2nAP/+z4HgQAEwA4xBUg+IUkoo1RgQIx4HRAAIQTsZjmOUIUJ3ryQgSlBchYECpjiqMI846nmUE08iChiNQ8D/R5D4NeI8+x8OdvMoQhmB3XychN0GsFsXeQ9SlHCYabAhYgBHTQCB7ZiFioSRII21NHBMGP7s/i7Of9yCiyoSZWAxxHgjBlEXcTHGmGWM1ROEAEnqDqT904f5aRG+nqGYikbo7zdD06vRppb1KnN6moZ3DzgNbJc1Je6TA3MyTb9b2xvFO48UQaWEbXDWAw6xbISD84jk2H02Rs+qQQR70i3ucfKHnBqnGg2yby9mmxcv32rnGnBrCO1NjI1ii8PrWj3Lw+/u0y+PyWLQrcMak++3sHDhgbQnE/lj4xJC3rT9Hw/Rs2yguk0yIXAYFOoB1z2qm77ZbE/L8PlvDw8rooyardS676mQWMqwJPlfW/qX5zBKXMqhYLQS8Lw1H5b4031XlvZc47POCy4uzfBBkpfTPco4j3+Vy0WPzmOFpP3NgX0yCVlw7aK+fNvsjflJOaIP0+1RTuayMkAes9ABfmH5ZSBUo7sVkIx8a7BdkmvPPrmD3i9pD/lPEPQAd0BMOahWT7F/RDqsmim2Zk1gr5icnKbHsOnsXkYo+8/fVok8ffqo2L9TCJZNy18hjwlJMBxwGDM/TRBieOaTeILL+CAiwrDPoErZ2/nix/Pl2Zutauv7KSokrUbZ/akvM2U8TpKkKvdoCV3f+ctvf7Dh30lZVodHhWQfPT4aF2nioGTs8X7l8vI9xjHPdg4xHdV+lMgklX1x9+zW/muxEJ63EKYYHzpZ0fH+dDKJrDxHJB7yfGygenmz5kgXtru4eQlGLy9njz5+LKf7GPmLrk5H+Eqh9+75Xx9P8ny0dUVDRW3gm1/mX71W5d39CqwISqbEkPSy9/Vci0wlCiQBmozL2cJjJhBhDcGWIU7oL7eD/e5icmRvxXT9shtYtxb50ZU//bmbpIyJaGJ4fbm8brUBWnFhHTKEDVky5FKUBQhZW/TD1dZhT1+smgAozal2WBESLS7lno4+wHR+czOI5mKgJK9cgX5G8OqqNiF6EawzGYap4AH5VfBVkUou5zjrBjgL7qEPm1Y9n8ckDe2GGiGidVDWC8aPHxweVJNVE42JTAgHZNvpuV0HiSprsk7em+l8o0zcwwDCCeIytixiDKexB2kjWXq9NP88f52AR8F165pKzhjP6o1VKtCMc5k610tJ39RGG3y1CpXIKrEYttelhyfV9TIdn6/yRJSzFnedNTY2SdEHOwRHB0v6ZVNv7e1cDYuC9yVxtGL5MMS6SyuDlFm7VZ4h50wqswFcr6kz3KBy1tSZ6ms135+8OCIV4PF0OlpZphTdqJznKA1u/uqMbBdFt3G6CX0N2ASiKHLrYIPpTZYkMngJWZrkjSV790Z09UbwV6fj5eHY3myRdjUjam1xs2mRu74zQmWAVouHSTQG+MZrvXFEQRFbIwneOhdCMPDoi6eEyvXWImDBoXdPiuN3Ro7TRbdmtkvQbZ77zsVLorRqKblqFTQK8xynUkVM7L2CGeIVQrFCLtY5NncE3mi0aajW9L/yrp7wvsDabwAAAABJRU5ErkJggg==";
-                byte[] imageBase64Bytes = System.Convert.FromBase64String(imageBase64);
+                // logs.Add("try share image to facebook");
+                // string imageBase64 = "iVBORw0KGgoAAAANSUhEUgAAACAAAAARCAIAAAAzPjmrAAAE+UlEQVQ4ESWVyW4dxxWG69TcM+9AUaJImYyswaOMLALbCWDAq+wC5HXyDHmPrLMykG1sIEACBPEg2JRE2qJIXvFOfW9PNaduAjQK6Oq/vjrndP2nAP/+z4HgQAEwA4xBUg+IUkoo1RgQIx4HRAAIQTsZjmOUIUJ3ryQgSlBchYECpjiqMI846nmUE08iChiNQ8D/R5D4NeI8+x8OdvMoQhmB3XychN0GsFsXeQ9SlHCYabAhYgBHTQCB7ZiFioSRII21NHBMGP7s/i7Of9yCiyoSZWAxxHgjBlEXcTHGmGWM1ROEAEnqDqT904f5aRG+nqGYikbo7zdD06vRppb1KnN6moZ3DzgNbJc1Je6TA3MyTb9b2xvFO48UQaWEbXDWAw6xbISD84jk2H02Rs+qQQR70i3ucfKHnBqnGg2yby9mmxcv32rnGnBrCO1NjI1ii8PrWj3Lw+/u0y+PyWLQrcMak++3sHDhgbQnE/lj4xJC3rT9Hw/Rs2yguk0yIXAYFOoB1z2qm77ZbE/L8PlvDw8rooyardS676mQWMqwJPlfW/qX5zBKXMqhYLQS8Lw1H5b4031XlvZc47POCy4uzfBBkpfTPco4j3+Vy0WPzmOFpP3NgX0yCVlw7aK+fNvsjflJOaIP0+1RTuayMkAes9ABfmH5ZSBUo7sVkIx8a7BdkmvPPrmD3i9pD/lPEPQAd0BMOahWT7F/RDqsmim2Zk1gr5icnKbHsOnsXkYo+8/fVok8ffqo2L9TCJZNy18hjwlJMBxwGDM/TRBieOaTeILL+CAiwrDPoErZ2/nix/Pl2Zutauv7KSokrUbZ/akvM2U8TpKkKvdoCV3f+ctvf7Dh30lZVodHhWQfPT4aF2nioGTs8X7l8vI9xjHPdg4xHdV+lMgklX1x9+zW/muxEJ63EKYYHzpZ0fH+dDKJrDxHJB7yfGygenmz5kgXtru4eQlGLy9njz5+LKf7GPmLrk5H+Eqh9+75Xx9P8ny0dUVDRW3gm1/mX71W5d39CqwISqbEkPSy9/Vci0wlCiQBmozL2cJjJhBhDcGWIU7oL7eD/e5icmRvxXT9shtYtxb50ZU//bmbpIyJaGJ4fbm8brUBWnFhHTKEDVky5FKUBQhZW/TD1dZhT1+smgAozal2WBESLS7lno4+wHR+czOI5mKgJK9cgX5G8OqqNiF6EawzGYap4AH5VfBVkUou5zjrBjgL7qEPm1Y9n8ckDe2GGiGidVDWC8aPHxweVJNVE42JTAgHZNvpuV0HiSprsk7em+l8o0zcwwDCCeIytixiDKexB2kjWXq9NP88f52AR8F165pKzhjP6o1VKtCMc5k610tJ39RGG3y1CpXIKrEYttelhyfV9TIdn6/yRJSzFnedNTY2SdEHOwRHB0v6ZVNv7e1cDYuC9yVxtGL5MMS6SyuDlFm7VZ4h50wqswFcr6kz3KBy1tSZ6ms135+8OCIV4PF0OlpZphTdqJznKA1u/uqMbBdFt3G6CX0N2ASiKHLrYIPpTZYkMngJWZrkjSV790Z09UbwV6fj5eHY3myRdjUjam1xs2mRu74zQmWAVouHSTQG+MZrvXFEQRFbIwneOhdCMPDoi6eEyvXWImDBoXdPiuN3Ro7TRbdmtkvQbZ77zsVLorRqKblqFTQK8xynUkVM7L2CGeIVQrFCLtY5NncE3mi0aajW9L/yrp7wvsDabwAAAABJRU5ErkJggg==";
+                // byte[] imageBase64Bytes = System.Convert.FromBase64String(imageBase64);
                 // MixThirdShare.instance.ShareFacebook(null, imageBase64Bytes, (result) => {
                 //     logs.Add("share fb photo success: " + result);
                 // }, (code, errorMsg) => {
@@ -296,7 +297,7 @@ namespace MixNameSpace
                 int width = 896;
                 int height = 1344;
                 logs.Add("screen dpi: " + dpi+ "; screenWidth: " + screenWidth + "; screenHeight: " + screenHeight);
-                MixH5WebViewManager.OpenHalfWebView(screenWidth / 2, screenHeight / 2, width, height, (msg) => {
+                MixFyberManager.OpenHalfWebView(screenWidth / 2, screenHeight / 2, width, height, (msg) => {
                     logs.Add("half webview close " + msg);
                 }, (isOpen, msg) => {
                     if (isOpen) {
@@ -309,12 +310,12 @@ namespace MixNameSpace
             y += buttonHeight + 10;
             if (GUI.Button(new Rect(0, y, buttonWith, buttonHeight), "close half webview", btnStyle))
             {
-                MixH5WebViewManager.CloseHalfWebView();
+                MixFyberManager.CloseHalfWebView();
             }
             y += buttonHeight + 10;
             if (GUI.Button(new Rect(0, y, buttonWith, buttonHeight), "open task webview", btnStyle))
             {
-                MixH5WebViewManager.OpenTaskWebView(0.24, (msg) => {
+                MixFyberManager.OpenTaskWebView(0.24, (msg) => {
                     logs.Add("task webview success " + msg);
                 }, (errorMsg) => {
                     logs.Add("task webview failed " + errorMsg);
@@ -324,7 +325,7 @@ namespace MixNameSpace
             if (GUI.Button(new Rect(0, y, buttonWith, buttonHeight), "refresh web show more", btnStyle))
             {
                 logs.Add("refresh web show more");
-                MixH5WebViewManager.refresh_web_show_more();
+                MixFyberManager.refresh_web_show_more();
             }
 
             
@@ -374,5 +375,22 @@ namespace MixNameSpace
                 }
             }
         }
+
+        void KeepScreenOn() 
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            try {
+                int FLAG_KEEP_SCREEN_ON = 128;
+                AndroidJavaClass jcPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+                AndroidJavaObject activity = jcPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+                activity.Call("runOnUiThread", new AndroidJavaRunnable(() => {
+                    //需要在UI线程中调用
+                    activity.Call<AndroidJavaObject>("getWindow").Call("addFlags", FLAG_KEEP_SCREEN_ON);
+                }));
+            } catch (System.Exception e) {
+                Debug.LogError(e.Message);
+            }
+#endif
+        }    
     }
 }

@@ -62,7 +62,7 @@ namespace MixNameSpace
         {
             Debug.LogFormat("OnInterstitialDisplayedEvent -----");
             MixMaxManager.LogAdShow(adtype, adUnitId, adInfo);
-            MixH5WebViewManager.refresh_web_show_inter();
+            MixFyberManager.refresh_web_show_inter();
         }
 
         private void OnInterstitialAdFailedToDisplayEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo, MaxSdkBase.AdInfo adInfo)

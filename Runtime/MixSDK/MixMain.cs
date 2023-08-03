@@ -7,15 +7,14 @@ namespace MixNameSpace
 {
     public class MixMain : MonoBehaviour
     {
-
         static public MixMain instance;
         static public MixLogInfo mixLogInfo;
         static public MixSDKConfig mixSDKConfig;
         private Action<string> initCallback;
-        static public string SDK_VERSION = "mix-newpay-v33";
+        static public string SDK_VERSION = "mix-newpay-v38";
         public Action<MixAdjustInfo> adjustInfoCallback;
         public event Action OnMaxInit;
-        
+
         private void Awake()
         {
             if (instance == null)
@@ -25,19 +24,19 @@ namespace MixNameSpace
             else
             {
                 Debug.LogError($"MixMain instance: {instance.GetHashCode()}" );
-            }
 
-            
-            if (instance == null)
-            {
                 DontDestroyOnLoad(gameObject);
                 instance = this;
+                
                 Debug.LogError($"MixMain instance after init: {instance.GetHashCode()}" );
             }
         }
 
         public void Init(MixSDKConfig config, Action<string> initCallback)
         {
+            string channelName = MixSDKBridgeFactory.instance.GetWalleChannelName();
+            if (!string.IsNullOrWhiteSpace(channelName)) config.debug = true;
+
             this.initCallback = initCallback;
             mixSDKConfig = config;
             PlatformInfo pinfo = mixSDKConfig.GetPlatformInfo();
@@ -56,8 +55,10 @@ namespace MixNameSpace
         public void NexIap(string s)
         {
             OnMaxInit?.Invoke();
+
             MixIap.instance.Init(mixSDKConfig, SDKInitFinish);
         }
+
         public void IapInit(Action onComplete)
         {
             MixIap.instance.Init(mixSDKConfig, (s)=>
@@ -66,6 +67,8 @@ namespace MixNameSpace
                 onComplete?.Invoke();
             });
         }
+
+        
         public void SDKInitFinish(string ispFinishResult)
         {
             Debug.Log("Mix SDKInitFinish and game_start and restore the adjust");
@@ -99,8 +102,8 @@ namespace MixNameSpace
         {
             if (null != MixAdjustManager.instance.info) {
                 Debug.LogWarningFormat("the adjust info is not null");
-                MixH5WebViewManager.SetNetwork(MixAdjustManager.instance.info.network);
-                MixH5WebViewManager.SetLogCallback((eventName, dict) => {
+                MixFyberManager.SetNetwork(MixAdjustManager.instance.info.network);
+                MixFyberManager.SetLogCallback((eventName, dict) => {
                     string network = dict["network"];
                     string name = dict["name"];
                     string url = dict["url"];

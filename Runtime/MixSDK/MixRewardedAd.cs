@@ -100,7 +100,7 @@ namespace MixNameSpace
             {
                 MixCommon.DelayRunActionNext(onRewardedAdReceivedRewardEventAction);
             }
-            MixH5WebViewManager.refresh_web_show_reward();
+            MixFyberManager.refresh_web_show_reward();
         }
 
         private void OnRewardedAdRevenuePaidEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)

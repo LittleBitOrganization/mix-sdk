@@ -28,5 +28,8 @@ namespace MixNameSpace
         void OnRequestCheckPay(Dictionary<string, object> read, Action<Dictionary<string, object>> success, Action<string> fail);
         // 请求sdk的消耗品需要主动消耗
         void OnRequestMixGameOrderIdConsume(long gameOrderId, Action<Dictionary<string, object>> success, Action<string> fail);
+
+        // 获取 Walle 渠道名称
+        string GetWalleChannelName();
     }
 }

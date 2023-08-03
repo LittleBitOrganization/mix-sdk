@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MixNameSpace
 {
-#if UNITY_EDITOR && !UNITY_ANDROID && !UNITY_IOS
+#if UNITY_EDITOR
     public class MixSDKBridgeEditor : MixSDKBridgeBase
     {
         public override void OnLog(string eventName, Dictionary<string, object> dict)
@@ -46,6 +46,11 @@ namespace MixNameSpace
         public override void OnPayment(string itemId, string eventId, string cpOrderId, long gameOrderId, Action<Dictionary<string, object>> callback)
         {
             
+        }
+
+        public override void OnOrderConsume(Dictionary<string, object> dict, Action<Dictionary<string, object>> callback)
+        {
+
         }
     }
     // 订阅商品信息

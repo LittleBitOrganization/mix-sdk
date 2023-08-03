@@ -8,8 +8,20 @@
 
 
         <!--<androidPackage spec="com.simplesdk:SimpleNativeBase:0.3.37" />-->
-        <!--<androidPackage spec="com.android.billingclient:billing:4.0.0" />-->
-        <androidPackage spec="com.mix.h5:MixH5WebView:0.4.5" />
+        <androidPackage spec="com.android.billingclient:billing:5.2.1" />
+        <androidPackage spec="com.fyber:fyber-uni-sdk:0.4.15" />
+
+         <!-- Bigo Ads -->
+        <androidPackage spec="com.bigossp:max-mediation:3.0.3.0">
+            <repositories>
+                <repository>https://repo1.maven.org/maven2/</repository>
+            </repositories>
+        </androidPackage>
+        <androidPackage spec="com.bigossp:bigo-ads:3.0.3">
+            <repositories>
+                <repository>https://repo1.maven.org/maven2/</repository>
+            </repositories>
+        </androidPackage>
     </androidPackages>
     <iosPods>
 
